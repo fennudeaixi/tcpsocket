@@ -4,6 +4,14 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+
+#pragma pack(1)
+struct DataPackage
+{
+	int age;
+	char name[32];
+};
+
 int main()
 {
 	//生成widows socket环境
@@ -30,10 +38,12 @@ int main()
 		else 
 			break;
 
-		char recvBuf[256] = {};
+		char recvBuf[128] = {};
 		int nlen = recv(_sock, recvBuf, sizeof(recvBuf), 0);
-		if (nlen > 0)
-			std::cout << recvBuf;
+		if (nlen > 0) {
+			DataPackage* dp = (DataPackage *)recvBuf;
+			std::cout << "年龄：" << dp->age << "姓名: " << dp->name;
+		}
 
 	}
 	

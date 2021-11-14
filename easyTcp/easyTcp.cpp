@@ -8,6 +8,14 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+
+#pragma pack(1)
+struct DataPackage
+{
+	int age;
+	char name[32];
+};
+
 int main()
 {
 	//生成widows socket环境
@@ -50,20 +58,16 @@ int main()
 		nLen = recv(_cSock, _recvBuf, sizeof(_recvBuf), 0);
 
 		//处理请求
-		char msgbuf[] = "???";
-		if (0 == strcmp(_recvBuf, "getName"))
+		if (0 == strcmp(_recvBuf, "getinfo"))
 		{
-			strcpy(msgbuf, "xiaoqiang");
+			DataPackage dp = { 80,"123" };
+			send(_cSock, (const char *)&dp, sizeof(dp), 0);
 		}
-		else if (0 == strcmp(_recvBuf, "getAge"))
-		{
-			strcpy(msgbuf, "20");
-		}
-			send(_cSock, msgbuf, strlen(msgbuf) + 1, 0);
+		
 		
 	}
 	
-	//6 关闭socket
+	//6 关闭socket //111
 	closesocket(_sock);
 
 	WSACleanup();
